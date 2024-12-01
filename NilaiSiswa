@@ -1,0 +1,105 @@
+import java.util.*;
+
+public class StudentSorter {
+
+    // Bubble Sort: Mengurutkan berdasarkan nilai akhir
+    public static void bubbleSortByScore(List<Student> students, boolean ascending) {
+        int n = students.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if ((ascending && students.get(j).getScore() > students.get(j + 1).getScore()) ||
+                    (!ascending && students.get(j).getScore() < students.get(j + 1).getScore())) {
+                    Collections.swap(students, j, j + 1);
+                }
+            }
+        }
+    }
+
+    // Selection Sort: Mengurutkan berdasarkan nama siswa
+    public static void selectionSortByName(List<Student> students, boolean ascending) {
+        int n = students.size();
+        for (int i = 0; i < n - 1; i++) {
+            int targetIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                if ((ascending && students.get(j).getName().compareToIgnoreCase(students.get(targetIndex).getName()) < 0) ||
+                    (!ascending && students.get(j).getName().compareToIgnoreCase(students.get(targetIndex).getName()) > 0)) {
+                    targetIndex = j;
+                }
+            }
+            Collections.swap(students, i, targetIndex);
+        }
+    }
+
+    // Menampilkan daftar siswa
+    public static void displayStudents(List<Student> students) {
+        System.out.println("\nDaftar Siswa:");
+        for (Student student : students) {
+            System.out.printf("Nama: %-15s Nilai: %d%n", student.getName(), student.getScore());
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Student> students = new ArrayList<>();
+
+        // Input data siswa
+        System.out.print("Berapa banyak siswa yang ingin dimasukkan? ");
+        int studentCount = scanner.nextInt();
+        scanner.nextLine(); // Clear buffer
+
+        for (int i = 0; i < studentCount; i++) {
+            System.out.println("\nSiswa ke-" + (i + 1) + ":");
+            System.out.print("Nama: ");
+            String name = scanner.nextLine();
+            System.out.print("Nilai: ");
+            int score = scanner.nextInt();
+            scanner.nextLine(); // Clear buffer
+            students.add(new Student(name, score));
+        }
+
+        // Pilih metode pengurutan
+        System.out.println("\nPilih metode pengurutan:");
+        System.out.println("1. Bubble Sort (Nilai Akhir)");
+        System.out.println("2. Selection Sort (Nama Siswa)");
+        System.out.print("Pilihan Anda: ");
+        int choice = scanner.nextInt();
+
+        System.out.print("Urutkan secara ascending? (true/false): ");
+        boolean ascending = scanner.nextBoolean();
+
+        // Sorting
+        switch (choice) {
+            case 1:
+                bubbleSortByScore(students, ascending);
+                break;
+            case 2:
+                selectionSortByName(students, ascending);
+                break;
+            default:
+                System.out.println("Pilihan tidak valid!");
+                return;
+        }
+
+        // Tampilkan hasil
+        displayStudents(students);
+    }
+}
+
+// Class Student untuk menyimpan data siswa
+class Student {
+    private String name;
+    private int score;
+
+    public Student(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getScore() {
+        return score;
+    }
+}
